@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-image_path = 'C:/Users/ice/Downloads/111.jpg'  
+image_path = r"C:\Users\mtz20\IdeaProjects\ComputerGraphic\lab 2.1\111.jpg"  
 image = Image.open(image_path)
 
 image_array = np.array(image)

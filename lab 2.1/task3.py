@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 
 def update_image(hue, saturation, value):
     hsv_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2HSV)
-    hsv_image[..., 0] = (hsv_image[..., 0].astype(int) + hue) % 180
+    hsv_image[..., 0] = (hsv_image[..., 0].astype(int) + hue) % 360
     hsv_image[..., 1] = np.clip(hsv_image[..., 1].astype(int) + saturation, 0, 255)
     hsv_image[..., 2] = np.clip(hsv_image[..., 2].astype(int) + value, 0, 255)
     
@@ -21,7 +21,7 @@ def update_image(hue, saturation, value):
 
 def save_image():
     hsv_image = cv2.cvtColor(original_image, cv2.COLOR_BGR2HSV)
-    hsv_image[..., 0] = (hsv_image[..., 0].astype(int) + hue_slider.get()) % 180
+    hsv_image[..., 0] = (hsv_image[..., 0].astype(int) + hue_slider.get()) % 360
     hsv_image[..., 1] = np.clip(hsv_image[..., 1].astype(int) + saturation_slider.get(), 0, 255)
     hsv_image[..., 2] = np.clip(hsv_image[..., 2].astype(int) + value_slider.get(), 0, 255)
     
