@@ -3,23 +3,30 @@ import numpy as np
 
 def bresenham(x0, y0, x1, y1):
     points = []
+
     dx = abs(x1 - x0)
     dy = abs(y1 - y0)
     sx = 1 if x0 < x1 else -1
     sy = 1 if y0 < y1 else -1
-    err = dx - dy
 
-    while True:
-        points.append((x0, y0))
-        if x0 == x1 and y0 == y1:
-            break
-        err2 = err * 2
-        if err2 > -dy:
-            err -= dy
-            x0 += sx
-        if err2 < dx:
-            err += dx
-            y0 += sy
+    if dx >= dy:
+        d = 2 * dy - dx
+        y = y0
+        for x in range(x0, x1 + sx, sx):
+            points.append((x, y))
+            if d > 0:
+                y += sy
+                d -= 2 * dx
+            d += 2 * dy
+    else:
+        d = 2 * dx - dy
+        x = x0
+        for y in range(y0, y1 + sy, sy):
+            points.append((x, y))
+            if d > 0:
+                x += sx
+                d -= 2 * dy
+            d += 2 * dx
 
     return points
 
@@ -38,39 +45,36 @@ def wu_line(x0, y0, x1, y1):
         x0, y0, x1, y1 = x1, y1, x0, y0
 
     dx = x1 - x0
-    dy = abs(y1 - y0)
+    dy = y1 - y0
     gradient = dy / dx if dx != 0 else 0
 
-    y = y0
-    for x in range(x0, x1 + 1):
-        if steep:
-            plot_pixel(y, x, 1 - (y - int(y)))
-            plot_pixel(y + 1, x, (y - int(y)))
-        else:
-            plot_pixel(x, y, 1 - (y - int(y)))
-            plot_pixel(x, y + 1, (y - int(y)))
+    plot_pixel(x0, y0, 1)
 
+    y = y0 + gradient
+    for x in range(x0 + 1, x1):
+        plot_pixel(x, int(y), 1 - (y - int(y)))
+        plot_pixel(x, int(y) + 1, y - int(y))
         y += gradient
+
+    plot_pixel(x1, y1, 1)
 
     return points
 
 
-#WU
 x0, y0 = 2, 3
-x1, y1 = 8, 5
+x1, y1 = 15, 12
 points_wu = wu_line(x0, y0, x1, y1)
 
 fig, ax = plt.subplots()
 for (x, y, c) in points_wu:
-    ax.plot(x, y, 'o', color=(c, c, c))  # Используем цвет в градациях серого
+    ax.plot(x, y, 'o', color=(c, c, c), markersize=10) 
 
-plt.title("Wu's Line Algorithm")
-plt.xlim(0, 10)
-plt.ylim(0, 10)
+plt.title("Wu's Line Algorithm (Zoomed)")
+plt.xlim(0, 20) 
+plt.ylim(0, 20) 
 plt.grid()
 plt.show()
 
-#Brezenham
 x0, y0 = 2, 3
 x1, y1 = 8, 5
 points = bresenham(x0, y0, x1, y1)
